@@ -42,7 +42,7 @@
 #define HUF_STATIC_LINKING_ONLY
 #include "huf.h"           /* HUF_buildCTable, HUF_writeCTable */
 #include "zstd_internal.h" /* includes zstd.h */
-#include "xxhash.h"        /* XXH64 */
+#include "xxhash.h"        /* XXH64_ZSTD */
 #include "divsufsort.h"
 #ifndef ZDICT_STATIC_LINKING_ONLY
 #  define ZDICT_STATIC_LINKING_ONLY
@@ -880,7 +880,7 @@ size_t ZDICT_finalizeDictionary(void* dictBuffer, size_t dictBufferCapacity,
 
     /* dictionary header */
     MEM_writeLE32(header, ZSTD_MAGIC_DICTIONARY);
-    {   U64 const randomID = XXH64(customDictContent, dictContentSize, 0);
+    {   U64 const randomID = XXH64_ZSTD(customDictContent, dictContentSize, 0);
         U32 const compliantID = (randomID % ((1U<<31)-32768)) + 32768;
         U32 const dictID = params.dictID ? params.dictID : compliantID;
         MEM_writeLE32(header+4, dictID);
@@ -933,7 +933,7 @@ static size_t ZDICT_addEntropyTablesFromBuffer_advanced(
 
     /* add dictionary header (after entropy tables) */
     MEM_writeLE32(dictBuffer, ZSTD_MAGIC_DICTIONARY);
-    {   U64 const randomID = XXH64((char*)dictBuffer + dictBufferCapacity - dictContentSize, dictContentSize, 0);
+    {   U64 const randomID = XXH64_ZSTD((char*)dictBuffer + dictBufferCapacity - dictContentSize, dictContentSize, 0);
         U32 const compliantID = (randomID % ((1U<<31)-32768)) + 32768;
         U32 const dictID = params.dictID ? params.dictID : compliantID;
         MEM_writeLE32((char*)dictBuffer+4, dictID);

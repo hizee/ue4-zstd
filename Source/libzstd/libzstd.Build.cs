@@ -9,7 +9,7 @@ public class libzstd : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicSystemIncludePaths.AddRange(
+        PublicIncludePaths.AddRange(
 			new string[] {
 				Path.Combine(ModuleDirectory,"ThirdParty/zstd"),
                 Path.Combine(ModuleDirectory,"ThirdParty/zstd/common"),
@@ -42,10 +42,10 @@ public class libzstd : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
+				//"CoreUObject",
+				//"Engine",
+				//"Slate",
+				//"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

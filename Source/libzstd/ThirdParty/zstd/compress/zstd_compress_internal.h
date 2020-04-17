@@ -244,7 +244,7 @@ struct ZSTD_CCtx_s {
     unsigned long long pledgedSrcSizePlusOne;  /* this way, 0 (default) == unknown */
     unsigned long long consumedSrcSize;
     unsigned long long producedCSize;
-    XXH64_state_t xxhState;
+    XXH64_ZSTD_state_t xxhState;
     ZSTD_customMem customMem;
     size_t staticSize;
     SeqCollector seqCollector;

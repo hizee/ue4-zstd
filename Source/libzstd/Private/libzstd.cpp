@@ -10,15 +10,17 @@ FName FZstdCompressionFormat::GetCompressionFormatName()
 }
 bool FZstdCompressionFormat::Compress(void* CompressedBuffer, int32& CompressedSize, const void* UncompressedBuffer, int32 UncompressedSize, int32 CompressionData)
 {
-
+	UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Compress"));
 	return false;
 }
 bool FZstdCompressionFormat::Uncompress(void* UncompressedBuffer, int32& UncompressedSize, const void* CompressedBuffer, int32 CompressedSize, int32 CompressionData)
 {
+	UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Uncompress"));
 	return false;
 }
 int32 FZstdCompressionFormat::GetCompressedBufferSize(int32 UncompressedSize, int32 CompressionData)
 {
+	UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::GetCompressedBufferSize"));
 	return 0;
 }
 

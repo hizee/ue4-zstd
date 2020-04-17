@@ -1124,7 +1124,7 @@ typedef struct {
 
 typedef struct {
     int contentSizeFlag; /**< 1: content size will be in frame header (when known) */
-    int checksumFlag;    /**< 1: generate a 32-bits checksum using XXH64 algorithm at end of frame, for error detection */
+    int checksumFlag;    /**< 1: generate a 32-bits checksum using XXH64_ZSTD algorithm at end of frame, for error detection */
     int noDictIDFlag;    /**< 1: no dictID will be saved into frame header (dictID is only useful for dictionary compression) */
 } ZSTD_frameParameters;
 

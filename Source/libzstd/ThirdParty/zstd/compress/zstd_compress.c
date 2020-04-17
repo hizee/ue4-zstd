@@ -1488,7 +1488,7 @@ static size_t ZSTD_resetCCtx_internal(ZSTD_CCtx* zc,
             (unsigned)pledgedSrcSize, zc->appliedParams.fParams.contentSizeFlag);
         zc->blockSize = blockSize;
 
-        XXH64_reset(&zc->xxhState, 0);
+        XXH64_ZSTD_reset(&zc->xxhState, 0);
         zc->stage = ZSTDcs_init;
         zc->dictID = 0;
 
@@ -2482,7 +2482,7 @@ static size_t ZSTD_compress_frameChunk (ZSTD_CCtx* cctx,
 
     DEBUGLOG(5, "ZSTD_compress_frameChunk (blockSize=%u)", (unsigned)blockSize);
     if (cctx->appliedParams.fParams.checksumFlag && srcSize)
-        XXH64_update(&cctx->xxhState, src, srcSize);
+        XXH64_ZSTD_update(&cctx->xxhState, src, srcSize);
 
     while (remaining) {
         ZSTD_matchState_t* const ms = &cctx->blockState.matchState;
@@ -3040,7 +3040,7 @@ static size_t ZSTD_writeEpilogue(ZSTD_CCtx* cctx, void* dst, size_t dstCapacity)
     }
 
     if (cctx->appliedParams.fParams.checksumFlag) {
-        U32 const checksum = (U32) XXH64_digest(&cctx->xxhState);
+        U32 const checksum = (U32) XXH64_ZSTD_digest(&cctx->xxhState);
         RETURN_ERROR_IF(dstCapacity<4, dstSize_tooSmall);
         DEBUGLOG(4, "ZSTD_writeEpilogue: write checksum : %08X", (unsigned)checksum);
         MEM_writeLE32(op, checksum);

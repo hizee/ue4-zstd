@@ -30,7 +30,7 @@
 #define HUF_STATIC_LINKING_ONLY
 #include "huf.h"
 #ifndef XXH_STATIC_LINKING_ONLY
-#  define XXH_STATIC_LINKING_ONLY  /* XXH64_state_t */
+#  define XXH_STATIC_LINKING_ONLY  /* XXH64_ZSTD_state_t */
 #endif
 #include "xxhash.h"                /* XXH_reset, update, digest */
 

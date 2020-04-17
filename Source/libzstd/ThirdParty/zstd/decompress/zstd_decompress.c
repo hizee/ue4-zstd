@@ -441,7 +441,7 @@ static size_t ZSTD_decodeFrameHeader(ZSTD_DCtx* dctx, const void* src, size_t he
     RETURN_ERROR_IF(dctx->fParams.dictID && (dctx->dictID != dctx->fParams.dictID),
                     dictionary_wrong);
 #endif
-    if (dctx->fParams.checksumFlag) XXH64_reset(&dctx->xxhState, 0);
+    if (dctx->fParams.checksumFlag) XXH64_ZSTD_reset(&dctx->xxhState, 0);
     return 0;
 }
 
@@ -668,7 +668,7 @@ static size_t ZSTD_decompressFrame(ZSTD_DCtx* dctx,
 
         if (ZSTD_isError(decodedSize)) return decodedSize;
         if (dctx->fParams.checksumFlag)
-            XXH64_update(&dctx->xxhState, op, decodedSize);
+            XXH64_ZSTD_update(&dctx->xxhState, op, decodedSize);
         op += decodedSize;
         ip += cBlockSize;
         remainingSrcSize -= cBlockSize;
@@ -680,7 +680,7 @@ static size_t ZSTD_decompressFrame(ZSTD_DCtx* dctx,
                         corruption_detected);
     }
     if (dctx->fParams.checksumFlag) { /* Frame content checksum verification */
-        U32 const checkCalc = (U32)XXH64_digest(&dctx->xxhState);
+        U32 const checkCalc = (U32)XXH64_ZSTD_digest(&dctx->xxhState);
         U32 checkRead;
         RETURN_ERROR_IF(remainingSrcSize<4, checksum_wrong);
         checkRead = MEM_readLE32(ip);
@@ -956,7 +956,7 @@ size_t ZSTD_decompressContinue(ZSTD_DCtx* dctx, void* dst, size_t dstCapacity, c
             RETURN_ERROR_IF(rSize > dctx->fParams.blockSizeMax, corruption_detected, "Decompressed Block Size Exceeds Maximum");
             DEBUGLOG(5, "ZSTD_decompressContinue: decoded size from block : %u", (unsigned)rSize);
             dctx->decodedSize += rSize;
-            if (dctx->fParams.checksumFlag) XXH64_update(&dctx->xxhState, dst, rSize);
+            if (dctx->fParams.checksumFlag) XXH64_ZSTD_update(&dctx->xxhState, dst, rSize);
 
             if (dctx->stage == ZSTDds_decompressLastBlock) {   /* end of frame */
                 DEBUGLOG(4, "ZSTD_decompressContinue: decoded size from frame : %u", (unsigned)dctx->decodedSize);
@@ -981,7 +981,7 @@ size_t ZSTD_decompressContinue(ZSTD_DCtx* dctx, void* dst, size_t dstCapacity, c
 
     case ZSTDds_checkChecksum:
         assert(srcSize == 4);  /* guaranteed by dctx->expected */
-        {   U32 const h32 = (U32)XXH64_digest(&dctx->xxhState);
+        {   U32 const h32 = (U32)XXH64_ZSTD_digest(&dctx->xxhState);
             U32 const check32 = MEM_readLE32(src);
             DEBUGLOG(4, "ZSTD_decompressContinue: checksum : calculated %08X :: %08X read", (unsigned)h32, (unsigned)check32);
             RETURN_ERROR_IF(check32 != h32, checksum_wrong);

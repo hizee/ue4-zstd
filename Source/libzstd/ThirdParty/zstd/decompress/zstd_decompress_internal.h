@@ -114,7 +114,7 @@ struct ZSTD_DCtx_s
     ZSTD_dStage stage;
     U32 litEntropy;
     U32 fseEntropy;
-    XXH64_state_t xxhState;
+    XXH64_ZSTD_state_t xxhState;
     size_t headerSize;
     ZSTD_format_e format;
     const BYTE* litPtr;

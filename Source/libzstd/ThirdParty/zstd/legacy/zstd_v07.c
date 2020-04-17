@@ -15,9 +15,9 @@
 #include <stdlib.h>     /* malloc, free, qsort */
 
 #ifndef XXH_STATIC_LINKING_ONLY
-#  define XXH_STATIC_LINKING_ONLY    /* XXH64_state_t */
+#  define XXH_STATIC_LINKING_ONLY    /* XXH64_ZSTD_state_t */
 #endif
-#include "xxhash.h"                  /* XXH64_* */
+#include "xxhash.h"                  /* XXH64_ZSTD_* */
 #include "zstd_v07.h"
 
 #define FSEv07_STATIC_LINKING_ONLY   /* FSEv07_MIN_TABLELOG */
@@ -2943,7 +2943,7 @@ struct ZSTDv07_DCtx_s
     ZSTDv07_dStage stage;
     U32 litEntropy;
     U32 fseEntropy;
-    XXH64_state_t xxhState;
+    XXH64_ZSTD_state_t xxhState;
     size_t headerSize;
     U32 dictID;
     const BYTE* litPtr;
@@ -3239,7 +3239,7 @@ static size_t ZSTDv07_decodeFrameHeader(ZSTDv07_DCtx* dctx, const void* src, siz
 {
     size_t const result = ZSTDv07_getFrameParams(&(dctx->fParams), src, srcSize);
     if (dctx->fParams.dictID && (dctx->dictID != dctx->fParams.dictID)) return ERROR(dictionary_wrong);
-    if (dctx->fParams.checksumFlag) XXH64_reset(&dctx->xxhState, 0);
+    if (dctx->fParams.checksumFlag) XXH64_ZSTD_reset(&dctx->xxhState, 0);
     return result;
 }
 
@@ -3838,7 +3838,7 @@ static size_t ZSTDv07_decompressFrame(ZSTDv07_DCtx* dctx,
         if (blockProperties.blockType == bt_end) break;   /* bt_end */
 
         if (ZSTDv07_isError(decodedSize)) return decodedSize;
-        if (dctx->fParams.checksumFlag) XXH64_update(&dctx->xxhState, op, decodedSize);
+        if (dctx->fParams.checksumFlag) XXH64_ZSTD_update(&dctx->xxhState, op, decodedSize);
         op += decodedSize;
         ip += cBlockSize;
         remainingSize -= cBlockSize;
@@ -4017,7 +4017,7 @@ size_t ZSTDv07_decompressContinue(ZSTDv07_DCtx* dctx, void* dst, size_t dstCapac
             if (ZSTDv07_isError(cBlockSize)) return cBlockSize;
             if (bp.blockType == bt_end) {
                 if (dctx->fParams.checksumFlag) {
-                    U64 const h64 = XXH64_digest(&dctx->xxhState);
+                    U64 const h64 = XXH64_ZSTD_digest(&dctx->xxhState);
                     U32 const h32 = (U32)(h64>>11) & ((1<<22)-1);
                     const BYTE* const ip = (const BYTE*)src;
                     U32 const check32 = ip[2] + (ip[1] << 8) + ((ip[0] & 0x3F) << 16);
@@ -4055,7 +4055,7 @@ size_t ZSTDv07_decompressContinue(ZSTDv07_DCtx* dctx, void* dst, size_t dstCapac
             dctx->expected = ZSTDv07_blockHeaderSize;
             dctx->previousDstEnd = (char*)dst + rSize;
             if (ZSTDv07_isError(rSize)) return rSize;
-            if (dctx->fParams.checksumFlag) XXH64_update(&dctx->xxhState, dst, rSize);
+            if (dctx->fParams.checksumFlag) XXH64_ZSTD_update(&dctx->xxhState, dst, rSize);
             return rSize;
         }
     case ZSTDds_decodeSkippableHeader:

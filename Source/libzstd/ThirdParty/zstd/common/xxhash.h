@@ -57,11 +57,11 @@ Q.Score is a measure of quality of the hash function.
 It depends on successfully passing SMHasher test set.
 10 is a perfect score.
 
-A 64-bits version, named XXH64, is available since r35.
+A 64-bits version, named XXH64_ZSTD, is available since r35.
 It offers much better speed, but for 64-bits applications only.
 Name     Speed on 64 bits    Speed on 32 bits
-XXH64       13.8 GB/s            1.9 GB/s
-XXH32        6.8 GB/s            6.0 GB/s
+XXH64_ZSTD       13.8 GB/s            1.9 GB/s
+XXH32_ZSTD        6.8 GB/s            6.0 GB/s
 */
 
 #if defined (__cplusplus)
@@ -122,25 +122,25 @@ regular symbol name will be automatically translated by this header.
 #ifdef XXH_NAMESPACE
 #  define XXH_CAT(A,B) A##B
 #  define XXH_NAME2(A,B) XXH_CAT(A,B)
-#  define XXH32 XXH_NAME2(XXH_NAMESPACE, XXH32)
-#  define XXH64 XXH_NAME2(XXH_NAMESPACE, XXH64)
-#  define XXH_versionNumber XXH_NAME2(XXH_NAMESPACE, XXH_versionNumber)
-#  define XXH32_createState XXH_NAME2(XXH_NAMESPACE, XXH32_createState)
-#  define XXH64_createState XXH_NAME2(XXH_NAMESPACE, XXH64_createState)
-#  define XXH32_freeState XXH_NAME2(XXH_NAMESPACE, XXH32_freeState)
-#  define XXH64_freeState XXH_NAME2(XXH_NAMESPACE, XXH64_freeState)
-#  define XXH32_reset XXH_NAME2(XXH_NAMESPACE, XXH32_reset)
-#  define XXH64_reset XXH_NAME2(XXH_NAMESPACE, XXH64_reset)
-#  define XXH32_update XXH_NAME2(XXH_NAMESPACE, XXH32_update)
-#  define XXH64_update XXH_NAME2(XXH_NAMESPACE, XXH64_update)
-#  define XXH32_digest XXH_NAME2(XXH_NAMESPACE, XXH32_digest)
-#  define XXH64_digest XXH_NAME2(XXH_NAMESPACE, XXH64_digest)
-#  define XXH32_copyState XXH_NAME2(XXH_NAMESPACE, XXH32_copyState)
-#  define XXH64_copyState XXH_NAME2(XXH_NAMESPACE, XXH64_copyState)
-#  define XXH32_canonicalFromHash XXH_NAME2(XXH_NAMESPACE, XXH32_canonicalFromHash)
-#  define XXH64_canonicalFromHash XXH_NAME2(XXH_NAMESPACE, XXH64_canonicalFromHash)
-#  define XXH32_hashFromCanonical XXH_NAME2(XXH_NAMESPACE, XXH32_hashFromCanonical)
-#  define XXH64_hashFromCanonical XXH_NAME2(XXH_NAMESPACE, XXH64_hashFromCanonical)
+#  define XXH32_ZSTD XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD)
+#  define XXH64_ZSTD XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD)
+#  define XXH64_ZSTD_versionNumber XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_versionNumber)
+#  define XXH32_ZSTD_createState XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_createState)
+#  define XXH64_ZSTD_createState XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_createState)
+#  define XXH32_ZSTD_freeState XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_freeState)
+#  define XXH64_ZSTD_freeState XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_freeState)
+#  define XXH32_ZSTD_reset XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_reset)
+#  define XXH64_ZSTD_reset XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_reset)
+#  define XXH32_ZSTD_update XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_update)
+#  define XXH64_ZSTD_update XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_update)
+#  define XXH32_ZSTD_digest XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_digest)
+#  define XXH64_ZSTD_digest XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_digest)
+#  define XXH32_ZSTD_copyState XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_copyState)
+#  define XXH64_ZSTD_copyState XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_copyState)
+#  define XXH32_ZSTD_canonicalFromHash XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_canonicalFromHash)
+#  define XXH64_ZSTD_canonicalFromHash XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_canonicalFromHash)
+#  define XXH32_ZSTD_hashFromCanonical XXH_NAME2(XXH_NAMESPACE, XXH32_ZSTD_hashFromCanonical)
+#  define XXH64_ZSTD_hashFromCanonical XXH_NAME2(XXH_NAMESPACE, XXH64_ZSTD_hashFromCanonical)
 #endif
 
 
@@ -151,25 +151,25 @@ regular symbol name will be automatically translated by this header.
 #define XXH_VERSION_MINOR    6
 #define XXH_VERSION_RELEASE  2
 #define XXH_VERSION_NUMBER  (XXH_VERSION_MAJOR *100*100 + XXH_VERSION_MINOR *100 + XXH_VERSION_RELEASE)
-XXH_PUBLIC_API unsigned XXH_versionNumber (void);
+XXH_PUBLIC_API unsigned XXH64_ZSTD_versionNumber (void);
 
 
 /* ****************************
 *  Simple Hash Functions
 ******************************/
-typedef unsigned int       XXH32_hash_t;
-typedef unsigned long long XXH64_hash_t;
+typedef unsigned int       XXH32_ZSTD_hash_t;
+typedef unsigned long long XXH64_ZSTD_hash_t;
 
-XXH_PUBLIC_API XXH32_hash_t XXH32 (const void* input, size_t length, unsigned int seed);
-XXH_PUBLIC_API XXH64_hash_t XXH64 (const void* input, size_t length, unsigned long long seed);
+XXH_PUBLIC_API XXH32_ZSTD_hash_t XXH32_ZSTD (const void* input, size_t length, unsigned int seed);
+XXH_PUBLIC_API XXH64_ZSTD_hash_t XXH64_ZSTD (const void* input, size_t length, unsigned long long seed);
 
 /*!
-XXH32() :
+XXH32_ZSTD() :
     Calculate the 32-bits hash of sequence "length" bytes stored at memory address "input".
     The memory between input & input+length must be valid (allocated and read-accessible).
     "seed" can be used to alter the result predictably.
     Speed on Core 2 Duo @ 3 GHz (single thread, SMHasher benchmark) : 5.4 GB/s
-XXH64() :
+XXH64_ZSTD() :
     Calculate the 64-bits hash of sequence of length "len" stored at memory address "input".
     "seed" can be used to alter the result predictably.
     This function runs 2x faster on 64-bits systems, but slower on 32-bits systems (see benchmark).
@@ -179,32 +179,32 @@ XXH64() :
 /* ****************************
 *  Streaming Hash Functions
 ******************************/
-typedef struct XXH32_state_s XXH32_state_t;   /* incomplete type */
-typedef struct XXH64_state_s XXH64_state_t;   /* incomplete type */
+typedef struct XXH32_ZSTD_state_s XXH32_ZSTD_state_t;   /* incomplete type */
+typedef struct XXH64_ZSTD_state_s XXH64_ZSTD_state_t;   /* incomplete type */
 
 /*! State allocation, compatible with dynamic libraries */
 
-XXH_PUBLIC_API XXH32_state_t* XXH32_createState(void);
-XXH_PUBLIC_API XXH_errorcode  XXH32_freeState(XXH32_state_t* statePtr);
+XXH_PUBLIC_API XXH32_ZSTD_state_t* XXH32_ZSTD_createState(void);
+XXH_PUBLIC_API XXH_errorcode  XXH32_ZSTD_freeState(XXH32_ZSTD_state_t* statePtr);
 
-XXH_PUBLIC_API XXH64_state_t* XXH64_createState(void);
-XXH_PUBLIC_API XXH_errorcode  XXH64_freeState(XXH64_state_t* statePtr);
+XXH_PUBLIC_API XXH64_ZSTD_state_t* XXH64_ZSTD_createState(void);
+XXH_PUBLIC_API XXH_errorcode  XXH64_ZSTD_freeState(XXH64_ZSTD_state_t* statePtr);
 
 
 /* hash streaming */
 
-XXH_PUBLIC_API XXH_errorcode XXH32_reset  (XXH32_state_t* statePtr, unsigned int seed);
-XXH_PUBLIC_API XXH_errorcode XXH32_update (XXH32_state_t* statePtr, const void* input, size_t length);
-XXH_PUBLIC_API XXH32_hash_t  XXH32_digest (const XXH32_state_t* statePtr);
+XXH_PUBLIC_API XXH_errorcode XXH32_ZSTD_reset  (XXH32_ZSTD_state_t* statePtr, unsigned int seed);
+XXH_PUBLIC_API XXH_errorcode XXH32_ZSTD_update (XXH32_ZSTD_state_t* statePtr, const void* input, size_t length);
+XXH_PUBLIC_API XXH32_ZSTD_hash_t  XXH32_ZSTD_digest (const XXH32_ZSTD_state_t* statePtr);
 
-XXH_PUBLIC_API XXH_errorcode XXH64_reset  (XXH64_state_t* statePtr, unsigned long long seed);
-XXH_PUBLIC_API XXH_errorcode XXH64_update (XXH64_state_t* statePtr, const void* input, size_t length);
-XXH_PUBLIC_API XXH64_hash_t  XXH64_digest (const XXH64_state_t* statePtr);
+XXH_PUBLIC_API XXH_errorcode XXH64_ZSTD_reset  (XXH64_ZSTD_state_t* statePtr, unsigned long long seed);
+XXH_PUBLIC_API XXH_errorcode XXH64_ZSTD_update (XXH64_ZSTD_state_t* statePtr, const void* input, size_t length);
+XXH_PUBLIC_API XXH64_ZSTD_hash_t  XXH64_ZSTD_digest (const XXH64_ZSTD_state_t* statePtr);
 
 /*
 These functions generate the xxHash of an input provided in multiple segments.
 Note that, for small input, they are slower than single-call functions, due to state management.
-For small input, prefer `XXH32()` and `XXH64()` .
+For small input, prefer `XXH32_ZSTD()` and `XXH64_ZSTD()` .
 
 XXH state must first be allocated, using XXH*_createState() .
 
@@ -231,8 +231,8 @@ When done, free XXH state space if it was allocated dynamically.
 #  define restrict   /* disable restrict */
 #endif
 
-XXH_PUBLIC_API void XXH32_copyState(XXH32_state_t* restrict dst_state, const XXH32_state_t* restrict src_state);
-XXH_PUBLIC_API void XXH64_copyState(XXH64_state_t* restrict dst_state, const XXH64_state_t* restrict src_state);
+XXH_PUBLIC_API void XXH32_ZSTD_copyState(XXH32_ZSTD_state_t* restrict dst_state, const XXH32_ZSTD_state_t* restrict src_state);
+XXH_PUBLIC_API void XXH64_ZSTD_copyState(XXH64_ZSTD_state_t* restrict dst_state, const XXH64_ZSTD_state_t* restrict src_state);
 
 
 /* **************************
@@ -243,14 +243,14 @@ XXH_PUBLIC_API void XXH64_copyState(XXH64_state_t* restrict dst_state, const XXH
 *  These functions allow transformation of hash result into and from its canonical format.
 *  This way, hash values can be written into a file / memory, and remain comparable on different systems and programs.
 */
-typedef struct { unsigned char digest[4]; } XXH32_canonical_t;
-typedef struct { unsigned char digest[8]; } XXH64_canonical_t;
+typedef struct { unsigned char digest[4]; } XXH32_ZSTD_canonical_t;
+typedef struct { unsigned char digest[8]; } XXH64_ZSTD_canonical_t;
 
-XXH_PUBLIC_API void XXH32_canonicalFromHash(XXH32_canonical_t* dst, XXH32_hash_t hash);
-XXH_PUBLIC_API void XXH64_canonicalFromHash(XXH64_canonical_t* dst, XXH64_hash_t hash);
+XXH_PUBLIC_API void XXH32_ZSTD_canonicalFromHash(XXH32_ZSTD_canonical_t* dst, XXH32_ZSTD_hash_t hash);
+XXH_PUBLIC_API void XXH64_ZSTD_canonicalFromHash(XXH64_ZSTD_canonical_t* dst, XXH64_ZSTD_hash_t hash);
 
-XXH_PUBLIC_API XXH32_hash_t XXH32_hashFromCanonical(const XXH32_canonical_t* src);
-XXH_PUBLIC_API XXH64_hash_t XXH64_hashFromCanonical(const XXH64_canonical_t* src);
+XXH_PUBLIC_API XXH32_ZSTD_hash_t XXH32_ZSTD_hashFromCanonical(const XXH32_ZSTD_canonical_t* src);
+XXH_PUBLIC_API XXH64_ZSTD_hash_t XXH64_ZSTD_hashFromCanonical(const XXH64_ZSTD_canonical_t* src);
 
 #endif /* XXHASH_H_5627135585666179 */
 
@@ -269,7 +269,7 @@ XXH_PUBLIC_API XXH64_hash_t XXH64_hashFromCanonical(const XXH64_canonical_t* src
    statically, on stack, or in a struct for example.
    Do not use members directly. */
 
-   struct XXH32_state_s {
+   struct XXH32_ZSTD_state_s {
        unsigned total_len_32;
        unsigned large_len;
        unsigned v1;
@@ -279,9 +279,9 @@ XXH_PUBLIC_API XXH64_hash_t XXH64_hashFromCanonical(const XXH64_canonical_t* src
        unsigned mem32[4];   /* buffer defined as U32 for alignment */
        unsigned memsize;
        unsigned reserved;   /* never read nor write, will be removed in a future version */
-   };   /* typedef'd to XXH32_state_t */
+   };   /* typedef'd to XXH32_ZSTD_state_t */
 
-   struct XXH64_state_s {
+   struct XXH64_ZSTD_state_s {
        unsigned long long total_len;
        unsigned long long v1;
        unsigned long long v2;
@@ -290,7 +290,7 @@ XXH_PUBLIC_API XXH64_hash_t XXH64_hashFromCanonical(const XXH64_canonical_t* src
        unsigned long long mem64[4];   /* buffer defined as U64 for alignment */
        unsigned memsize;
        unsigned reserved[2];          /* never read nor write, will be removed in a future version */
-   };   /* typedef'd to XXH64_state_t */
+   };   /* typedef'd to XXH64_ZSTD_state_t */
 
 
 #  ifdef XXH_PRIVATE_API
