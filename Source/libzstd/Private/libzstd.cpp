@@ -5,7 +5,7 @@
 #include "zstd.h"
 
 #define LOCTEXT_NAMESPACE "FlibzstdModule"
-#define DEFAULT_COMPRESSION_LEVEL 3
+#define DEFAULT_COMPRESSION_LEVEL 10
 
 int32 FZstdCompressionFormat::Level = DEFAULT_COMPRESSION_LEVEL;
 
@@ -16,7 +16,7 @@ FName FZstdCompressionFormat::GetCompressionFormatName()
 
 bool FZstdCompressionFormat::Compress(void* CompressedBuffer, int32& CompressedSize, const void* UncompressedBuffer, int32 UncompressedSize, int32 CompressionData)
 {
-	UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Compress level is %d"), FZstdCompressionFormat::Level);
+	// UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Compress level is %d"), FZstdCompressionFormat::Level);
 	int32 Result = ZSTD_compress(CompressedBuffer, CompressedSize, UncompressedBuffer, UncompressedSize, FZstdCompressionFormat::Level);
 	if (Result > 0)
 	{
@@ -57,6 +57,7 @@ void FlibzstdModule::StartupModule()
 		FZstdCompressionFormat::Level = FMath::Clamp(level, ZSTD_minCLevel(),ZSTD_maxCLevel());
 	}
 
+	UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Compress level is %d"), FZstdCompressionFormat::Level);
 	ZstdCompressionFormat = new FZstdCompressionFormat();
 	IModularFeatures::Get().RegisterModularFeature(COMPRESSION_FORMAT_FEATURE_NAME, ZstdCompressionFormat);
 

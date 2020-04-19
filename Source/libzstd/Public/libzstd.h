@@ -6,9 +6,6 @@
 #include "Modules/ModuleManager.h"
 #include "Misc/ICompressionFormat.h"
 
-// Runtime/Core/Public/Misc/ICompressionFormat.h
-#define COMPRESSION_FORMAT_FEATURE_NAME "CompressionFormat"
-
 struct FZstdCompressionFormat : public ICompressionFormat
 {
 	virtual FName GetCompressionFormatName()override;
