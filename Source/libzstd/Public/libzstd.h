@@ -16,6 +16,7 @@ struct FZstdCompressionFormat : public ICompressionFormat
 	virtual bool Uncompress(void* UncompressedBuffer, int32& UncompressedSize, const void* CompressedBuffer, int32 CompressedSize, int32 CompressionData)override;
 	virtual int32 GetCompressedBufferSize(int32 UncompressedSize, int32 CompressionData)override;
 
+	static int32 Level;
 };
 
 class FlibzstdModule : public IModuleInterface

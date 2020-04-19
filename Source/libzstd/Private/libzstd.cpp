@@ -5,18 +5,19 @@
 #include "zstd.h"
 
 #define LOCTEXT_NAMESPACE "FlibzstdModule"
-#define COMPRESS_LEVEL 19
+#define DEFAULT_COMPRESSION_LEVEL 3
+
+int32 FZstdCompressionFormat::Level = DEFAULT_COMPRESSION_LEVEL;
 
 FName FZstdCompressionFormat::GetCompressionFormatName()
 {
 	return TEXT("zstd");
 }
+
 bool FZstdCompressionFormat::Compress(void* CompressedBuffer, int32& CompressedSize, const void* UncompressedBuffer, int32 UncompressedSize, int32 CompressionData)
 {
-	//UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Compress"));
-	//UE_LOG(LogTemp, Log, TEXT("CompressedBuffer:%x,CompressedSize:%d,UnCompressedBuffer:%x,UnCompressedSize:%d,CompressionData:%d"),CompressedBuffer,CompressedSize,UncompressedBuffer,UncompressedSize,CompressionData);
-
-	int32 Result = ZSTD_compress(CompressedBuffer, CompressedSize, UncompressedBuffer, UncompressedSize, COMPRESS_LEVEL);
+	UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Compress level is %d"), FZstdCompressionFormat::Level);
+	int32 Result = ZSTD_compress(CompressedBuffer, CompressedSize, UncompressedBuffer, UncompressedSize, FZstdCompressionFormat::Level);
 	if (Result > 0)
 	{
 		if (Result > GetCompressedBufferSize(UncompressedSize, CompressionData))
@@ -32,9 +33,6 @@ bool FZstdCompressionFormat::Compress(void* CompressedBuffer, int32& CompressedS
 }
 bool FZstdCompressionFormat::Uncompress(void* UncompressedBuffer, int32& UncompressedSize, const void* CompressedBuffer, int32 CompressedSize, int32 CompressionData)
 {
-	//UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::Uncompress"));
-	//UE_LOG(LogTemp, Log, TEXT("UncompressedBuffer:%x,UncompressedSize:%d,CompressedBuffer:%x,CompressedSize:%d,CompressionData:%d"), UncompressedBuffer, UncompressedSize, CompressedBuffer, CompressedSize, CompressionData);
-
 	int32 Result = ZSTD_decompress(UncompressedBuffer, UncompressedSize, CompressedBuffer, CompressedSize);
 	if (Result > 0)
 	{
@@ -45,24 +43,30 @@ bool FZstdCompressionFormat::Uncompress(void* UncompressedBuffer, int32& Uncompr
 }
 int32 FZstdCompressionFormat::GetCompressedBufferSize(int32 UncompressedSize, int32 CompressionData)
 {
-	//UE_LOG(LogTemp, Log, TEXT("UncompressedSize:%d,CompressionData:%d"), UncompressedSize, CompressionData);
-	//UE_LOG(LogTemp, Log, TEXT("FZstdCompressionFormat::GetCompressedBufferSize"));
 	return ZSTD_compressBound(UncompressedSize);
 }
 
+#define ZSTD_LEVEL_OPTION_STRING TEXT("-ZstdLevel=")
 void FlibzstdModule::StartupModule()
 {
+	FString CommandLine = FCommandLine::Get();
+	if (CommandLine.Contains(ZSTD_LEVEL_OPTION_STRING, ESearchCase::IgnoreCase))
+	{
+		int32 level;
+		FParse::Value(FCommandLine::Get(), *FString(ZSTD_LEVEL_OPTION_STRING).ToLower(), level);
+		FZstdCompressionFormat::Level = FMath::Clamp(level, ZSTD_minCLevel(),ZSTD_maxCLevel());
+	}
+
 	ZstdCompressionFormat = new FZstdCompressionFormat();
 	IModularFeatures::Get().RegisterModularFeature(COMPRESSION_FORMAT_FEATURE_NAME, ZstdCompressionFormat);
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+
 }
 
 void FlibzstdModule::ShutdownModule()
 {
 	IModularFeatures::Get().UnregisterModularFeature(COMPRESSION_FORMAT_FEATURE_NAME, ZstdCompressionFormat);
 	delete ZstdCompressionFormat;
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
+
 }
 
 #undef LOCTEXT_NAMESPACE
