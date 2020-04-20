@@ -14,10 +14,10 @@
 	"IsBetaVersion": false,
 	"Installed": false,
 	"Modules": [
-		{
-			"Name": "libzstd",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		}
+    {
+      "Name": "libzstd",
+      "Type": "Runtime",
+      "LoadingPhase": "PostConfigInit"
+    }
 	]
 }
